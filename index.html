@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/public/typescript.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta CEP</title>
+  </head>
+  <body>
+    <form>
+      <div>
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" placeholder="Ex.: 76987-858" />
+      </div>
+      <div>
+        <label for="logradouro">Logradouro</label>
+        <input type="text" id="logradouro" placeholder="Ex.: Rua das Flores" />
+      </div>
+      <div>
+        <label for="numero">Número</label>
+        <input type="text" id="numero" placeholder="Ex.: 123" />
+      </div>
+      <div>
+        <label for="bairo">Bairro</label>
+        <input type="text" id="bairro" placeholder="Ex.: Centro" />
+      </div>
+      <div>
+        <label for="cidade">Cidade</label>
+        <select id="cidade" required>
+          <option value="" disabled selected>Selecione uma Cidade</option>
+          <option value="cidade"></option> 
+        </select>
+      </div>
+      <div>
+        <label for="estado">Estado</label>
+        <select id="estado" required>
+          <option value="" disabled selected>Selecione um Estado</option>
+          <option value="estado"></option> 
+        </select>
+      </div>
+    </form>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
