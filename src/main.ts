@@ -1,69 +1,86 @@
-import './style.css'
+import './style.css';
 
-const cep = document.querySelector<HTMLInputElement>("#cep")!
-const logradouro = document.querySelector<HTMLInputElement>("#logradouro")!
-const numero = document.querySelector<HTMLInputElement>("#numero")!
-const bairro = document.querySelector<HTMLInputElement>("#bairro")!
-const cidade = document.querySelector<HTMLSelectElement>("#cidade")!
-const estado = document.querySelector<HTMLSelectElement>("#estado")!
+const cep = document.querySelector<HTMLInputElement>("#cep")!;
+const logradouro = document.querySelector<HTMLInputElement>("#logradouro")!;
+const numero = document.querySelector<HTMLInputElement>("#numero")!;
+const bairro = document.querySelector<HTMLInputElement>("#bairro")!;
+const cidade = document.querySelector<HTMLSelectElement>("#cidade")!;
+const estado = document.querySelector<HTMLSelectElement>("#estado")!;
 
-cep.addEventListener('blur', () => {
-  consultarCep();
-})
-
+// Função para limpar campos
 function limparFormulario() {
   logradouro.value = '';
   numero.value = '';
   bairro.value = '';
-  cidade.innerHTML = '<option value="">Selecione uma Cidade</option>'
+  cidade.innerHTML = '<option value="">Selecione uma Cidade</option>';
   estado.innerHTML = '<option value="">Selecione um Estado</option>';
 }
 
-limparFormulario();
-
+// Carregar estados
 async function obterEstados() {
   const resultado = await fetch(`https://brasilapi.com.br/api/ibge/uf/v1`);
-  const estados = await resultado.json();
-  return estados;
+  return await resultado.json();
 }
 
-const estados = document.querySelector<HTMLSelectElement>('#estado');
 async function preencherEstados() {
   const listaEstados = await obterEstados();
-  listaEstados.forEach((estado: { sigla: string, nome: string | null }) => {
-    const option = document.createElement('option');
-    option.value = estado.sigla;
-    option.textContent = estado.nome;
-    estados?.appendChild(option);
+  listaEstados.forEach((uf: { sigla: string; nome: string }) => {
+    const option = document.createElement("option");
+    option.value = uf.sigla;
+    option.textContent = uf.nome;
+    estado.appendChild(option);
   });
-  return listaEstados.sigla;
 }
 
+// Obter cidades por estado
 async function obterCidades(uf: string) {
-  const resultado = await fetch(`https://brasilapi.com.br/api/ibge/municipios/v1/${uf}?providers=dados-abertos-br,gov,wikipedia`);
-  const cidades = await resultado.json();
-  return cidades;
+  const resultado = await fetch(`https://brasilapi.com.br/api/ibge/municipios/v1/${uf}`);
+  return await resultado.json();
 }
 
-const cidades = document.querySelector<HTMLSelectElement>('#cidade');
 async function preencherCidades(uf: string) {
   const listaCidades = await obterCidades(uf);
-
-  listaCidades.forEach((cidade: { nome: string }) => {
-    const option = document.createElement('option');
-    option.value = cidade.nome;
-    option.textContent = cidade.nome;
-    cidades?.appendChild(option);
+  cidade.innerHTML = '<option value="">Selecione uma Cidade</option>';
+  listaCidades.forEach((c: { nome: string }) => {
+    const option = document.createElement("option");
+    option.value = c.nome;
+    option.textContent = c.nome;
+    cidade.appendChild(option);
   });
 }
 
+// Consultar CEP
 async function consultarCep() {
-  const resultado = await fetch(`https://brasilapi.com.br/api/cep/v1/${cep.value}`);
-  const body = await resultado.json();
-  limparFormulario();
-  numero.focus();
-  logradouro.value = body.street;
-  bairro.value = body.neighborhood;
-  preencherCidades();
-  preencherEstados();
+  const valorCep = cep.value.replace(/\D/g, '');
+  if (!valorCep) return;
+
+  try {
+    const resultado = await fetch(`https://brasilapi.com.br/api/cep/v1/${valorCep}`);
+    if (!resultado.ok) throw new Error("CEP inválido");
+
+    const body = await resultado.json();
+    logradouro.value = body.street;
+    bairro.value = body.neighborhood;
+    numero.focus();
+
+    estado.value = body.state;
+    await preencherCidades(body.state);
+    cidade.value = body.city;
+
+  } catch (err) {
+    alert("Erro ao buscar CEP.");
+    console.error(err);
+  }
 }
+
+cep.addEventListener("blur", consultarCep);
+
+estado.addEventListener("change", async () => {
+  const uf = estado.value;
+  if (uf) {
+    await preencherCidades(uf);
+  }
+});
+
+limparFormulario();
+preencherEstados();

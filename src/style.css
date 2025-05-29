@@ -1,6 +1,116 @@
 *{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #f0f4f8;
+    font-family: "Quicksand", sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .form-cartoes {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-titulo {
+    background: linear-gradient(rgba(0, 0, 0, 0.3)), url(../public/foto-programacao.jpg) center/cover;
+    color: #ffffff;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+.form-conteudo {
+    background-color: #ffffff;
+    padding: 20px;
+    border-left: 6px solid #3ab74f;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
 }
 
+.form-conteudo label {
+    font-weight: 600;
+    color: #202124;
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border: 2px solid #636262;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(103, 58, 183, 0.2);
+    outline: none;
+}
+
+textarea {
+    resize: none;
+    min-height: 100px;
+}
+
+.form-opcoes {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.form-opcoes label {
+    font-weight: normal;
+}
+
+.caixa-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #202124;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+input[type="submit"] {
+    display: flex;
+    background-color: #3ab74f;
+    color: #ffffff;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    gap: 50px;
+}
+
+input[type="submit"]:hover {
+    background-color: #2e8d3e;
+}
